@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 
 import "./index.css";
 const letters = "abcdefghijklmnopqrstuvwxyz";
@@ -6,12 +6,15 @@ const numbers = "0123456789";
 const symbols = "!@#$%^&*()_+";
 
 function App() {
-  const [fullName, setfullName] = useState("");
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
-  const [specialization, setspecialization] = useState("");
-  const [experience, setexperience] = useState("");
+
   const [description, setdescription] = useState("");
+
+  const fullNamerRef = useRef();
+  const specializationRef = useRef();
+  const experienceRef = useRef();
+
   const userNameIsValid = useMemo(() => {
     const charsvaild = username.split("").every((char) => {
       return letters.includes(char.toLowerCase()) || numbers.includes(char);
@@ -32,6 +35,9 @@ function App() {
   }, [description]);
   const handleSubmit = (e) => {
     e.preventDefault();
+    const fullName = fullNamerRef.current.value;
+    const specialization = specializationRef.current.value;
+    const experience = experienceRef.current.value;
     if (
       !fullName.trim() ||
       !username.trim() ||
@@ -63,11 +69,7 @@ function App() {
       <form onSubmit={handleSubmit}>
         <label>
           <p>Nome comleto</p>
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setfullName(e.target.value)}
-          />
+          <input type="text" ref={fullNamerRef} />
         </label>
         <label>
           <p>username</p>
@@ -101,10 +103,8 @@ function App() {
         </label>
         <label>
           <p>specialization</p>
-          <select
-            value={specialization}
-            onChange={(e) => setspecialization(e.target.value)}
-          >
+          <select ref={specializationRef}>
+            <option value="">--</option>
             <option value="frontend">Frontend</option>
             <option value="backend">Backend</option>
             <option value="fullstack">Fullstack</option>
@@ -112,11 +112,7 @@ function App() {
         </label>
         <label>
           <p>experience</p>
-          <input
-            type="number"
-            value={experience}
-            onChange={(e) => setexperience(e.target.value)}
-          />
+          <input type="number" ref={experienceRef} />
         </label>
         <label>
           <p>description</p>
